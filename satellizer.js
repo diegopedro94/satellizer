@@ -517,6 +517,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
               url = [defaults.authorizationEndpoint, Oauth2.buildQueryString()].join('?');
 
               if (window.cordova) {
+                defaults.popupOptions.toolbar='no';
+                defaults.popupOptions.disallowoverscroll='yes';
                 openPopup = popup.open(url, defaults.name, defaults.popupOptions, defaults.redirectUri).eventListener(defaults.redirectUri);
               } else {
                 openPopup = popup.open(url, defaults.name, defaults.popupOptions, defaults.redirectUri).pollPopup(defaults.redirectUri);
@@ -705,7 +707,9 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           var UA = $window.navigator.userAgent;
           var windowName = (window.cordova || UA.indexOf('CriOS') > -1) ? '_blank' : name;
 
-          Popup.popupWindow = $window.open(url, windowName, stringifiedOptions);
+          document.addEventListener("deviceready",function(){
+              Popup.popupWindow = cordova.InAppBrowser.open(url, windowName, stringifiedOptions);
+          },false);
 
           $window.popup = Popup.popupWindow;
 
